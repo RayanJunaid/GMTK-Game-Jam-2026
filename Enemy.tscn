@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://drnbj1wo2rvxd"]
+
+[ext_resource type="Script" uid="uid://cnks3wphelkwk" path="res://enemy.gd" id="1_tt7e2"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_8qmga"]
+
+[node name="Enemy" type="Node2D" unique_id=1546828091]
+script = ExtResource("1_tt7e2")
+
+[node name="EnemySprite" type="Sprite2D" parent="." unique_id=1031216676]
+scale = Vector2(35.5, 31.5)
+texture = SubResource("PlaceholderTexture2D_8qmga")
+
+[node name="EnemyTimer" type="Timer" parent="." unique_id=123501631]
+wait_time = 5.0
+one_shot = true
+autostart = true
+
+[node name="EnemyTimerLabel" type="Label" parent="." unique_id=802284528]
+offset_left = -20.0
+offset_top = 16.0
+offset_right = 20.0
+offset_bottom = 39.0
+
+[connection signal="timeout" from="EnemyTimer" to="." method="_on_timer_timeout"]
