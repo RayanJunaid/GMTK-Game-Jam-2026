@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://3hi7rw2jq3q6"]
 
 [ext_resource type="Script" uid="uid://bsj3gkcmcdsg5" path="res://player.gd" id="1_xhfnw"]
+[ext_resource type="Texture2D" uid="uid://c4dptmnftydc5" path="res://Assets/pngwing.com.png" id="2_kpjcp"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_8qmga"]
 
@@ -8,5 +9,10 @@
 script = ExtResource("1_xhfnw")
 
 [node name="PlayerSprite" type="Sprite2D" parent="." unique_id=2114885505]
-scale = Vector2(149.5, 62.5)
+position = Vector2(5.9604645e-08, 0)
+scale = Vector2(31.999998, 48.999996)
 texture = SubResource("PlaceholderTexture2D_8qmga")
+
+[node name="HitboxSprite" type="Sprite2D" parent="." unique_id=1466945476]
+scale = Vector2(0.019841246, 0.01986935)
+texture = ExtResource("2_kpjcp")

@@ -9,6 +9,7 @@ script = ExtResource("1_u45fm")
 enemy_scene = ExtResource("2_uj4qe")
 
 [node name="Player" parent="." unique_id=1841195886 instance=ExtResource("2_vbyki")]
+top_level = true
 position = Vector2(960, 540)
 
 [node name="Enemies" type="Node2D" parent="." unique_id=471493278]
@@ -22,15 +23,17 @@ position = Vector2(960, 540)
 position = Vector2(811, 541)
 
 [node name="UpMarker" type="Marker2D" parent="Positions" unique_id=1088426318]
-position = Vector2(960, 469)
+position = Vector2(960, 419)
 
 [node name="RightMarker" type="Marker2D" parent="Positions" unique_id=1978575645]
 position = Vector2(1105, 541)
 
 [node name="DownMarker" type="Marker2D" parent="Positions" unique_id=432139137]
-position = Vector2(960, 626)
+position = Vector2(963, 664)
 
 [node name="SpawnTimer" type="Timer" parent="." unique_id=1750374747]
 autostart = true
 
+[connection signal="parried" from="." to="Player" method="_on_arena_parried"]
+[connection signal="took_damage" from="." to="Player" method="_on_arena_took_damage"]
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
