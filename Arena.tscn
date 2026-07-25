@@ -13,14 +13,25 @@ enemy_scene = ExtResource("2_uj4qe")
 [node name="SpawnTimer" type="Timer" parent="." unique_id=1750374747]
 autostart = true
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1963625137]
+[node name="Camera" type="Camera2D" parent="." unique_id=1963625137]
 
 [node name="PlayerSprite" type="Sprite2D" parent="." unique_id=881843406]
-scale = Vector2(58, 103)
+scale = Vector2(0.01, 0.018)
 texture = SubResource("PlaceholderTexture2D_qgwqb")
 
 [node name="HitboxSprite" type="Sprite2D" parent="." unique_id=1224180799]
 scale = Vector2(0.03, 0.03)
 texture = ExtResource("3_vbyki")
+
+[node name="GameTimer" type="Timer" parent="." unique_id=1779793421]
+autostart = true
+
+[node name="Label" type="Label" parent="." unique_id=245074858]
+offset_left = -540.0
+offset_top = -540.0
+offset_right = -447.0
+offset_bottom = -476.0
+theme_override_font_sizes/font_size = 50
+horizontal_alignment = 1
 
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
