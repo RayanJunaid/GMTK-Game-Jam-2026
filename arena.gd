@@ -1,9 +1,10 @@
-extends Node2D
+extends Node
 
 @export var enemy_scene: PackedScene
+var direction: Vector2i
+var expected_direction: Vector2i
 var parry_window := 0.25
 var can_parry := false
-var expected_target: Marker2D
 signal took_damage(damage)
 signal parried
 
@@ -15,40 +16,43 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	
+	$HitboxSprite.visible = true
 	# Move player to a marker based on input, and set player direction
 	if Input.is_action_pressed("left"):
-		$Player.global_position = $Positions/LeftMarker.global_position
-		$Player.direction = $Player.directions.LEFT
+		direction = Vector2i(-1, 0)
 	elif Input.is_action_pressed("right"):
-		$Player.global_position = $Positions/RightMarker.global_position
-		$Player.direction = $Player.directions.RIGHT
+		direction = Vector2i(1, 0)
 	elif Input.is_action_pressed("up"):
-		$Player.global_position = $Positions/UpMarker.global_position
-		$Player.direction = $Player.directions.UP
+		direction = Vector2i(0, -1)
 	elif Input.is_action_pressed("down"):
-		$Player.global_position = $Positions/DownMarker.global_position
-		$Player.direction = $Player.directions.DOWN
+		direction = Vector2i(0, 1)
 	else:
-		$Player.global_position = $Positions/CentreMarker.global_position
-		$Player.direction = $Player.directions.CENTRE
+		direction = Vector2i(0, 0)
+		$HitboxSprite.visible = false
+	$HitboxSprite.position = direction * Globals.offset
+	$PlayerSprite.position = direction * (Globals.offset - 100)
+	
 	
 	# During parry window, if player parries in the right position then emit parry signal
 	if can_parry and Input.is_action_just_pressed("parry"):
-		if $Player.global_position == expected_target.global_position:
+		if direction == expected_direction:
 			parried.emit()
 			can_parry = false
-			expected_target = null
+			print("parried")
 
 
 func _on_spawn_timer_timeout() -> void:
 	var enemy = enemy_scene.instantiate()
-	enemy.construct($Positions/LeftMarker, Vector2(0 ,540), 5.0)
+	var enemy_direction = Vector2i(0, 0)
+	enemy_direction[randi_range(0, 1)] = randi_range(0, 1) * 2 - 1
+	enemy.construct(enemy_direction, randf_range(2, 5))
 	enemy.attacked.connect(_on_enemy_attacked)
-	$Enemies.add_child(enemy)
+	add_child(enemy)
 
-func _on_enemy_attacked(attack_type, attack_target) -> void:
+
+func _on_enemy_attacked(attack_type, enemy_direction) -> void:
 	can_parry = true
-	expected_target = attack_target
+	expected_direction = enemy_direction
 	await get_tree().create_timer(parry_window).timeout
 	if can_parry:
 		print("Too early/late")

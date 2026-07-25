@@ -1,36 +1,28 @@
 extends Node2D
 
-var attack_target: Marker2D
 var target_distance
+var direction
 enum attack_types {PARRY, SLASH, DODGE}
 var attack_type
 var damage: int
-var spawnpoint_vector: Vector2
-var countdown: float
-signal attacked(attack_type, attack_target)
+signal attacked(attack_type, direction)
 
 
-func construct(attack_target: Marker2D, spawnpoint_vector: Vector2, countdown: float):
-	self.attack_target = attack_target
-	self.spawnpoint_vector = spawnpoint_vector
-	self.countdown = countdown
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	global_position = spawnpoint_vector
-	target_distance = spawnpoint_vector.distance_to(attack_target.global_position)
+func construct(direction: Vector2i, countdown: float):
+	self.direction = direction
+	$EnemyTimer.wait_time = countdown
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	#Move enemy from it's initial position to the corresponding marker
-	global_position = global_position.move_toward(attack_target.global_position, delta*target_distance/countdown)
-	
+	var viewport_size = get_viewport().get_visible_rect().size
+	var origin = Vector2(direction) * viewport_size / 2
+	var target = Vector2(direction) * Globals.offset
+	global_position = origin.lerp(target, ($EnemyTimer.wait_time - $EnemyTimer.time_left)/$EnemyTimer.wait_time)
 	$EnemyTimerLabel.text = str(int(ceil($EnemyTimer.time_left))) + "s"
-
 
 #On coundown timeout emit a signal to be caught by the parent
 func _on_enemy_timer_timeout() -> void:
-	attacked.emit(attack_type, attack_target)
+	attacked.emit(attack_type, direction)
 	queue_free()
