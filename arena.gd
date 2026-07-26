@@ -1,6 +1,7 @@
 extends Node
 
 @export var enemy_scene: PackedScene
+var game_time := 0.0
 var hp := 10
 var score := 0
 @onready var health_bar = $CanvasLayer/HealthBar
@@ -27,7 +28,8 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	$SpawnTimer.wait_time = initial_time / (-0.00002 * Time.get_ticks_msec() + 1)
+	game_time += delta
+	$SpawnTimer.wait_time = max(0.5, initial_time / (1.0 + game_time * 0.01))
 	$HitboxSprite.visible = true
 	# Move player to a marker based on input, and set player direction
 	if Input.is_action_pressed("left"):
@@ -78,7 +80,7 @@ func _on_spawn_timer_timeout() -> void:
 	if last_enemy != null:
 		enemy_countdown = last_enemy.get_node("DespawnTimer").time_left
 	
-	enemy.construct(enemy_direction, enemy_move, enemy_countdown) # stop it randomly going too fast by altering lb
+	enemy.construct(enemy_direction, enemy_move, randf_range(max(enemy_countdown, 2), 5 )) # stop it randomly going too fast by altering lb
 	enemy.attacked.connect(_on_enemy_attacked)
 	add_child(enemy)
 	enemy.play_enemy_animation("run")
