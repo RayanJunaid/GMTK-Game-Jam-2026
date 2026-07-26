@@ -1,15 +1,16 @@
 [gd_scene format=3 uid="uid://drnbj1wo2rvxd"]
 
 [ext_resource type="Script" uid="uid://cnks3wphelkwk" path="res://enemy.gd" id="1_tt7e2"]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_qgwqb"]
+[ext_resource type="SpriteFrames" uid="uid://bfe26rqm5cry5" path="res://Assets/Slime3Frames.tres" id="2_s7bn3"]
 
 [node name="Enemy" type="Node2D" unique_id=1546828091]
 script = ExtResource("1_tt7e2")
 
 [node name="EnemySprite" type="AnimatedSprite2D" parent="." unique_id=1309188977]
-scale = Vector2(35.5, 31.5)
-sprite_frames = SubResource("SpriteFrames_qgwqb")
+texture_filter = 1
+scale = Vector2(2, 2)
+sprite_frames = ExtResource("2_s7bn3")
+animation = &"run_up"
 
 [node name="EnemyTimerLabel" type="Label" parent="." unique_id=802284528]
 offset_left = -20.0
