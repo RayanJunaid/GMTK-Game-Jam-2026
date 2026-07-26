@@ -42,3 +42,4 @@ func _on_attack_timer_timeout() -> void:
 
 func _on_travel_timer_timeout() -> void:
 	despawn.emit()
+	queue_free()
