@@ -2,14 +2,14 @@
 
 [ext_resource type="Script" uid="uid://cnks3wphelkwk" path="res://enemy.gd" id="1_tt7e2"]
 
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_8qmga"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_qgwqb"]
 
 [node name="Enemy" type="Node2D" unique_id=1546828091]
 script = ExtResource("1_tt7e2")
 
-[node name="EnemySprite" type="Sprite2D" parent="." unique_id=1031216676]
+[node name="EnemySprite" type="AnimatedSprite2D" parent="." unique_id=1309188977]
 scale = Vector2(35.5, 31.5)
-texture = SubResource("PlaceholderTexture2D_8qmga")
+sprite_frames = SubResource("SpriteFrames_qgwqb")
 
 [node name="EnemyTimerLabel" type="Label" parent="." unique_id=802284528]
 offset_left = -20.0

@@ -7,6 +7,7 @@ var enemies: Dictionary[Vector2i, Enemy] = {}
 var last_spawned_enemies: Dictionary[Vector2i, Enemy] = {}
 var direction: Vector2i
 var can_move = false
+var facing_up := false
 
 
 # Called when the node enters the scene tree for the first time.
@@ -21,7 +22,6 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	
 	$SpawnTimer.wait_time = initial_time * exp(-0.0001 * Time.get_ticks_msec()) # use diff function
 	$HitboxSprite.visible = true
 	# Move player to a marker based on input, and set player direction
@@ -38,17 +38,25 @@ func _process(delta: float) -> void:
 		$HitboxSprite.visible = false
 	$HitboxSprite.position = direction * Globals.hitbox_offset
 	$PlayerSprite.position = direction * (Globals.hitbox_offset - 100)
+	
+	# idle animation handling
+	if direction == Vector2i(0, -1) and $PlayerSprite.animation.begins_with("idle"):
+		facing_up = true
+		$PlayerSprite.play("idle_up")
+	elif direction != Vector2i(0, 0) and facing_up and $PlayerSprite.animation.begins_with("idle"):
+		facing_up = false
+		$PlayerSprite.play("idle_down")
+	
 	if direction == Vector2i(0, 0):
 		return
-	
-	
 	# During timing window, if player executes correct action in the right position then dequeue
 	var enemy = enemies[direction]
 	if enemy == null:
 		return
-		
+	
 	if can_move and Input.is_action_just_pressed(Globals.Move.keys()[enemy.move]):
 		can_move = false
+		play_player_animation(enemy.move)
 		$Label.text = Globals.Move.keys()[enemy.move]
 		enemy.queue_free()
 
@@ -78,3 +86,38 @@ func _on_enemy_attacked(enemy: Enemy) -> void:
 		can_move = false
 	
 	enemies[enemy.direction] = null
+
+func play_player_animation(move: Globals.Move):
+	var move_str := ""
+	var dir_str := ""
+	var anim := ""
+	
+	match move:
+		Globals.Move.SLASH:
+			move_str = "slash"
+		Globals.Move.PARRY:
+			move_str = "parry"
+		Globals.Move.THRUST:
+			move_str = "thrust"
+
+	match direction:
+		Vector2i(-1, 0):
+			dir_str = "left"
+		Vector2i(1, 0):
+			dir_str = "right"
+		Vector2i(0, -1):
+			dir_str = "up"
+		Vector2i(0, 1):
+			dir_str = "down"
+		_:
+			return
+	anim = move_str + "_" + dir_str
+	$PlayerSprite.play(anim)
+	$PlayerSprite.set_frame_and_progress(0, 0.0)
+
+
+func _on_player_sprite_animation_finished() -> void:
+	if facing_up:
+		$PlayerSprite.play("idle_up")
+	else:
+		$PlayerSprite.play("idle_down")

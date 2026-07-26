@@ -2,7 +2,7 @@ extends Node
 
 var hitbox_offset: int
 const move_window := 0.3
-enum Move {PARRY, SLASH, DODGE}
+enum Move {PARRY, SLASH, THRUST}
 var viewport_size
 
 func _ready() -> void:
