@@ -9,7 +9,6 @@ var can_move = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	$Camera.zoom = get_viewport().get_visible_rect().size / 2
 	$SpawnTimer.wait_time = 5.0
 	for sign in [-1, 1]:
 		for axis in [0, 1]:
@@ -35,7 +34,7 @@ func _process(delta: float) -> void:
 		direction = Vector2i(0, 0)
 		$HitboxSprite.visible = false
 	$HitboxSprite.position = direction * Globals.hitbox_offset
-	$PlayerSprite.position = direction * (Globals.hitbox_offset - 0.05)
+	$PlayerSprite.position = direction * (Globals.hitbox_offset - 100)
 	if direction == Vector2i(0, 0):
 		return
 	
@@ -56,7 +55,7 @@ func _on_spawn_timer_timeout() -> void:
 	var enemy_direction = Vector2i(0, 0)
 	var enemy_move = randi_range(0, 2)
 	enemy_direction[randi_range(0, 1)] = randi_range(0, 1) * 2 - 1
-	enemy.construct(enemy_direction, enemy_move, randf_range(5, 5)) # need to fix the countdown calc
+	enemy.construct(enemy_direction, enemy_move, randf_range(1, 1)) # need to fix the countdown calc
 	enemy.attacked.connect(_on_enemy_attacked)
 	add_child(enemy)
 

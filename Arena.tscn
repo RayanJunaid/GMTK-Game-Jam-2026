@@ -6,6 +6,14 @@
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_qgwqb"]
 
+[sub_resource type="Animation" id="Animation_vbyki"]
+resource_name = "parry"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_uj4qe"]
+_data = {
+&"parry": SubResource("Animation_vbyki")
+}
+
 [node name="Arena" type="Node" unique_id=935507617]
 script = ExtResource("1_u45fm")
 enemy_scene = ExtResource("2_uj4qe")
@@ -16,8 +24,11 @@ autostart = true
 [node name="Camera" type="Camera2D" parent="." unique_id=1963625137]
 
 [node name="PlayerSprite" type="Sprite2D" parent="." unique_id=881843406]
-scale = Vector2(0.01, 0.018)
+scale = Vector2(50, 90)
 texture = SubResource("PlaceholderTexture2D_qgwqb")
+
+[node name="PlayerAnimations" type="AnimationPlayer" parent="." unique_id=928290867]
+libraries/ = SubResource("AnimationLibrary_uj4qe")
 
 [node name="HitboxSprite" type="Sprite2D" parent="." unique_id=1224180799]
 scale = Vector2(0.03, 0.03)
